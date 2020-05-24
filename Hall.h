@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include "Date.h"
-
 using std::vector;
 
 class Hall {
@@ -42,6 +41,4 @@ public:
 	bool is_booked(const Date& date) const {
 		return !is_free(date);
 	}
-
-	
 };
