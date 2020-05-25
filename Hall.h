@@ -9,6 +9,7 @@ class Hall {
 	int seats_per_row;
 	vector<Date> booked_dates;
 
+
 public:
 	
 	Hall() {
@@ -40,5 +41,9 @@ public:
 	
 	bool is_booked(const Date& date) const {
 		return !is_free(date);
+	}
+
+	int get_seats() const {
+		return rows * seats_per_row;
 	}
 };
