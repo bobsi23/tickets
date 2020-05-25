@@ -1,4 +1,5 @@
 .vs/
+Debug/
 tickets.sln
 tickets.vcxproj
 tickets.vcxproj.filters
