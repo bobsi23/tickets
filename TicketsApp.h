@@ -25,11 +25,24 @@ class TicketsApp {
         if (halls[index_of_hall].is_booked(date)) {
             cout << "Hall not available" << endl;
         }
-        else {   
-            Event new_event(event_name);
+        else {
+            Event new_event(event_name, halls[index_of_hall].get_seats(), 0, date);
             events.push_back(new_event);
             halls[index_of_hall].book(date);
         }
+    }
+
+    void free_seats() {
+        string event_name;
+        Date date;
+        cin >> event_name >> date;
+        for (int i = 0; i < events.size(); ++i) {
+            if (events[i].get_event_name() == event_name && events[i].get_date() == date) {
+                cout << events[i].get_free_seats();
+                return;
+            }
+        }
+        cout << "Event not found" << endl;     
     }
 
 public:
@@ -43,7 +56,7 @@ public:
                 add_event();
             }
             else if (command == "freeseats") {
-
+                free_seats();
             }
             else if (command == "book") {
 
