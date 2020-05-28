@@ -4,23 +4,19 @@
 using std::vector;
 
 class Hall {
-	int number;
 	int rows;
 	int seats_per_row;
 	vector<Date> booked_dates;
 
-
 public:
 	
 	Hall() {
-		number = 0;
 		rows = 0;
 		seats_per_row = 0;
 		booked_dates = vector<Date>();
 	}
 
-	Hall(int  _number, int _rows, int _seats_per_row) {
-		number = _number;
+	Hall(int _rows, int _seats_per_row) {
 		rows = _rows;
 		seats_per_row = _seats_per_row;
 		booked_dates = vector<Date>();
@@ -43,7 +39,11 @@ public:
 		return !is_free(date);
 	}
 
-	int get_seats() const {
-		return rows * seats_per_row;
+	int get_number_of_rows() const {
+		return rows;
+	}
+
+	int get_number_of_colums() const {
+		return seats_per_row;
 	}
 };
