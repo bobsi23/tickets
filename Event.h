@@ -6,7 +6,7 @@ using std::vector;
 using std::string;
 
 class Event {
-	string event_name;
+	string event_name; 
 	Date date;
 	vector<vector<Seat>> rows;
 
@@ -20,11 +20,18 @@ public:
 	Event(const string& _event_name, int number_of_rows, int number_of_colums, const Date& _date) {
 		event_name = _event_name;
 		date = _date;
-		rows = vector<vector<Seat>>(number_of_rows, vector<Seat>(number_of_colums, Seat()));
+		rows = vector<vector<Seat>>(number_of_rows, vector<Seat>(number_of_colums, Seat())); //!
 	}
 
 	string get_event_name() const {
 		return event_name;
+	}
+
+	int get_number_of_columns() const {
+		if (rows.empty()) {
+			return 0;
+		}
+		return rows[0].size();
 	}
 
 	int get_all_seats() const {
@@ -32,8 +39,7 @@ public:
 			return 0;
 		}
 		else {
-			int number_of_columns = rows[0].size();
-			return rows.size() * number_of_columns;
+			return rows.size() * get_number_of_columns();
 		}
 	}
 
@@ -55,5 +61,38 @@ public:
 
 	Date get_date() const {
 		return date;
+	}
+
+	bool is_valid(int row_number, int seat_number) const {
+		return 0 <= row_number && row_number < rows.size()
+			&& 0 <= seat_number && seat_number < get_number_of_columns();
+	}
+
+	bool is_booked(int row_number, int seat_number) const {
+		return rows[row_number][seat_number].is_booked();
+	}
+
+	bool is_bought(int row_number, int seat_number) const {
+		return rows[row_number][seat_number].is_bought();
+	}
+
+	void book_seat(int row_number, int seat_number, const string& note) {
+		if (!is_booked(row_number, seat_number)) {
+			rows[row_number][seat_number].book();
+			rows[row_number][seat_number].set_note(note);
+		}
+	}
+
+	void unbook_seat(int row_number, int seat_number) {
+		if (is_booked(row_number, seat_number)) {
+			rows[row_number][seat_number].unbook();
+			rows[row_number][seat_number].set_note("");
+		}
+	}
+
+	void buy_ticket(int row_number, int seat_number) {
+		if (!is_bought(row_number, seat_number)) {
+			rows[row_number][seat_number].buy();
+		}
 	}
 };
