@@ -92,6 +92,17 @@ public:
 		return counter;
 	}
 
+	int get_seat_number(int serial_number) {
+		for (int i = 0; i < rows.size(); ++i) {
+			for (int j = 0; j < rows[i].size(); ++j) {
+				if (rows[i][j].get_ticket_serial_number()==serial_number) {
+					return j;
+				}
+			}
+		}
+		return -1;
+	}
+
 	Date get_date() const {
 		return date;
 	}
