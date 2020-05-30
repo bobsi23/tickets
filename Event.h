@@ -10,16 +10,17 @@ class Event {
 	string event_name; 
 	Date date;
 	vector<Row> rows;
+	int hall_index;
 
 public:
 	Event() {
-		event_name = "";
-		date = Date();
+		hall_index = 0;
 	}
 
-	Event(const string& _event_name, int number_of_rows, int number_of_colums, const Date& _date) {
+	Event(const string& _event_name, int number_of_rows, int number_of_colums, const Date& _date, int _hall_index) {
 		event_name = _event_name;
 		date = _date;
+		hall_index = _hall_index;
 
 		for (int i = 0; i < number_of_rows; ++i) {
 			Row new_row(i, number_of_colums);
@@ -29,6 +30,10 @@ public:
 
 	string get_event_name() const {
 		return event_name;
+	}
+
+	int get_hall_index() const {
+		return hall_index;
 	}
 
 	int get_number_of_columns() const {
@@ -71,6 +76,18 @@ public:
 					++counter;
 				}
 			}
+		}
+		return counter;
+	}
+
+	int get_bought_seats_in_date_interval(const Date& date_from, const Date& date_to) const {
+		int counter = 0;
+		for (int i = 0; i < rows.size(); ++i) {
+			for (int j = 0; j < rows[i].size(); ++j) {
+				if (rows[i][j].is_bought_in_date_interval(date_from, date_to)){
+					++counter;
+				}
+			} 
 		}
 		return counter;
 	}

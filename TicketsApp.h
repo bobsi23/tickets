@@ -24,6 +24,8 @@ class TicketsApp {
         return nullptr;
     }
 
+    //Добавя ново представление на дата <date> с име <name> в зала <hall>.
+    //Ако в тази зала вече има друго представление на същата дата, командата да върне грешка.
     void add_event() {
         Date date;
         int index_of_hall;
@@ -42,6 +44,8 @@ class TicketsApp {
             halls[index_of_hall].book(date);
         }
     }
+    
+   // Извежда справка за свободните места за представление с име <name> на дата <date>(непродадени и незапазени билети).
 
     void free_seats() {
         string event_name;
@@ -58,6 +62,8 @@ class TicketsApp {
             cout << "Event not found" << endl;
         }
     }
+    
+   // Запазва билет за представление с име <name> на <date> на ред <row> и място <seat>, като добавя бележка <note>.
 
     void book() {
         int row_number;
@@ -82,6 +88,8 @@ class TicketsApp {
             cout << "Event not found" << endl;
         }
     }
+
+   // Отменя резервация за представление с име <name> на <date> на ред <row> и място <seat>.
 
     void unbook() {
         int row_number;
@@ -126,22 +134,94 @@ class TicketsApp {
                 cout<< "Seat not available or already bought, choose another seat" << endl;
             }
         }
+        else {
+            cout << "Event not found" << endl;
+        }
+    }
+
+    // TODO: Make this better
+    bool isDate(const string& s) {
+        return s[0] >= '0' && s[0] <= '9';
     }
 
     void bookings() {
+        if (cin.peek() == '\n') {
+            for (int i = 0; i < events.size(); ++i) {
+                cout << events[i].get_event_name() << ", " << events[i].get_date() << ": "
+                    << events[i].get_booked_seats_which_are_not_bought() << endl;
+            }
+        }
+        else {
+            string temporary;
+            cin >> temporary;
 
+            if (cin.peek() == '\n') {
+                if (isDate(temporary)) {
+                    for (int i = 0; i < events.size(); ++i) {
+                        if (events[i].get_date() == temporary) {
+                            cout << events[i].get_event_name() << ": "
+                                << events[i].get_booked_seats_which_are_not_bought() << endl;
+                        }
+                    }
+                }
+                else {
+                    for (int i = 0; i < events.size(); ++i) {
+                        if (events[i].get_event_name() == temporary) {
+                            cout << events[i].get_date() << ": "
+                                << events[i].get_booked_seats_which_are_not_bought() << endl;
+                        }
+                    }
+                }
+            }
+            else {
+                Date date(temporary);
+                string event_name;
+                cin >> event_name;
+
+                Event* found_event = find_event(event_name, date);
+
+                if (found_event != nullptr) {
+                    cout << found_event->get_booked_seats_which_are_not_bought() << endl;
+                }
+                else {
+                    cout << "Event not found" << endl;
+                }
+            }
+        }
     }
+
+   // Прави проверка за валидност на билет, като по дадения код <code> се извлича номера на мястото или се връща грешка, ако кодът е невалиден).
 
     void check() {
+        
 
     }
-
+   // Извежда справка за закупени билети от дата <from> до дата <to> в
     void report() {
+        Date date_from;
+        Date date_to;
+        cin >> date_from >> date_to;
+        
+        int hall_index;
+        bool we_have_read_hall = false;
 
+        if (cin.peek()!='\n') {
+            cin >> hall_index;
+            we_have_read_hall = true;
+        }
+        
+        for (int i = 0; i < events.size(); ++i) {
+            if (!we_have_read_hall || events[i].get_hall_index() == hall_index) {
+                cout << events[i].get_event_name() << ", " << events[i].get_date() << ": "
+                    << events[i].get_bought_seats_in_date_interval(date_from, date_to) << endl;
+            }
+        }
     }
 
 public:
     void run() {
+        cout << "Please enter all dates in the format: YYYY-MM-DD" << endl;
+
         string command;
 
         while (true) {

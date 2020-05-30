@@ -46,6 +46,11 @@ public:
 		note = "";
 		ticket_serial_number = 0;
 	}
+	
+	bool is_bought_in_date_interval(const Date& date_from, const Date& date_to) const{
+		return date_of_buying >= date_from && date_of_buying <= date_to;
+
+	}
 
 	bool is_booked() const {
 		return booked;
