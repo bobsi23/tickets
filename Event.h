@@ -2,25 +2,29 @@
 #include <string>
 #include <vector>
 #include "Seat.h"
+#include "Row.h"
 using std::vector;
 using std::string;
 
 class Event {
 	string event_name; 
 	Date date;
-	vector<vector<Seat>> rows;
+	vector<Row> rows;
 
 public:
 	Event() {
 		event_name = "";
 		date = Date();
-		rows = vector<vector<Seat>>();
 	}
 
 	Event(const string& _event_name, int number_of_rows, int number_of_colums, const Date& _date) {
 		event_name = _event_name;
 		date = _date;
-		rows = vector<vector<Seat>>(number_of_rows, vector<Seat>(number_of_colums, Seat())); //!
+
+		for (int i = 0; i < number_of_rows; ++i) {
+			Row new_row(i, number_of_colums);
+			rows.push_back(new_row);
+		}
 	}
 
 	string get_event_name() const {
@@ -57,6 +61,18 @@ public:
 
 	int get_free_seats() const {
 		return get_all_seats() - get_booked_seats();
+	}
+
+	int get_booked_seats_which_are_not_bought() const {
+		int counter = 0;
+		for (int i = 0; i < rows.size(); ++i) {
+			for (int j = 0; j < rows[i].size(); ++j) {
+				if (rows[i][j].is_booked() && !rows[i][j].is_bought()) {
+					++counter;
+				}
+			}
+		}
+		return counter;
 	}
 
 	Date get_date() const {
